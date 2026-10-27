@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Bautizo - Valentina</title>
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #fceceb;
+            --card-bg: #fffbf9;
+            --text-dark: #3a2e2a;
+            --gold: #c29f64;
+            --petal-color: #f2c4c1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url('https://images.unsplash.com/photo-1550005809-91ad75fb315f?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 10px;
+            overflow: hidden; 
+        }
+
+        /* -------------------------------------- */
+        /* EFECTO TELÓN Y SELLO                   */
+        /* -------------------------------------- */
+        #curtain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+        }
+
+        .curtain {
+            width: 50%;
+            height: 100%;
+            background-color: var(--bg-color);
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            position: relative;
+        }
+
+        .curtain-left { border-right: 1px solid var(--gold); }
+        .curtain-right { border-left: 1px solid var(--gold); }
+
+        .curtain-container-open .curtain-left { transform: translateX(-100%); }
+        .curtain-container-open .curtain-right { transform: translateX(100%); }
+
+        #seal-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .seal {
+            width: 100px;
+            height: 100px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse-seal 1.5s infinite alternate;
+        }
+
+        .seal-letter {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--gold);
+            margin-top: -5px;
+        }
+
+        @keyframes pulse-seal {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(194, 159, 100, 0.4); }
+            100% { transform: scale(1.05); box-shadow: 0 0 20px 5px rgba(194, 159, 100, 0); }
+        }
+
+        /* -------------------------------------- */
+        /* LLUVIA DE PÉTALOS CSS                  */
+        /* -------------------------------------- */
+        .petal {
+            position: fixed;
+            top: -50px;
+            width: 18px;
+            height: 18px;
+            background: var(--petal-color);
+            border-radius: 15px 0 15px 0;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 9998;
+            animation: fall linear forwards;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg) scale(1); }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.8); }
+        }
+
+        /* -------------------------------------- */
+        /* TARJETA PRINCIPAL                      */
+        /* -------------------------------------- */
+        .card {
+            background-color: var(--card-bg);
+            max-width: 480px;
+            width: 100%;
+            border-radius: 250px 250px 15px 15px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            position: relative;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        .card.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .photo-container { margin-bottom: 15px; }
+        .photo-container img { width: 180px; height: 230px; object-fit: cover; border-radius: 100px 100px 15px 15px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        h1.title { font-family: 'Playfair Display', serif; font-size: 1.6rem; letter-spacing: 3px; font-weight: 600; margin-bottom: 0px; color: var(--text-dark); }
+        h2.name { font-family: 'Great Vibes', cursive; font-size: 4rem; font-weight: normal; margin: -5px 0 15px 0; color: var(--text-dark); }
+        .quote { font-size: 0.85rem; font-style: italic; line-height: 1.4; margin: 0 auto 25px auto; max-width: 85%; color: #5a4b45; }
+        .middle-section { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin-bottom: 30px; }
+        .parents, .godparents { font-size: 0.75rem; line-height: 1.3; }
+        .role-title { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; display: block; }
+        .date-center { position: relative; text-align: center; padding: 10px; }
+        .date-center::before { content: '🕊️'; font-size: 2rem; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); opacity: 0.2; }
+        .date-number { font-family: 'Great Vibes', cursive; font-size: 3rem; line-height: 0.8; margin-bottom: 5px; }
+        .date-month { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); padding: 2px 0; margin-bottom: 3px; }
+        .date-year { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; }
+        .bottom-section { display: grid; grid-template-columns: 1fr 1fr; position: relative; margin-bottom: 30px; }
+        .bottom-section::after { content: ''; position: absolute; top: 10%; bottom: 10%; left: 50%; width: 1px; background-color: var(--gold); transform: translateX(-50%); }
+        .event-box { padding: 0 15px; font-size: 0.7rem; line-height: 1.4; }
+        .event-icon { font-size: 1.5rem; margin-bottom: 5px; color: var(--text-dark); }
+        .event-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
+        .event-address { margin-bottom: 10px; min-height: 60px; }
+        .event-time { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; font-style: italic; }
+        
+        /* Botones de Google Maps */
+        .btn-map { display: inline-block; margin-top: 8px; margin-bottom: 12px; padding: 6px 15px; background-color: transparent; color: var(--gold); border: 1px solid var(--gold); border-radius: 20px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 1px; transition: all 0.3s ease; }
+        .btn-map:hover { background-color: var(--gold); color: white; }
+
+        .footer { font-size: 0.85rem; margin-top: 20px; }
+        .btn-rsvp { display: inline-block; margin-top: 10px; padding: 10px 25px; background-color: transparent; color: var(--text-dark); border: 1px solid var(--gold); border-radius: 30px; text-decoration: none; font-family: 'Playfair Display', serif; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; position: relative; z-index: 10; }
+        .btn-rsvp:hover { background-color: var(--gold); color: white; }
+        @media (max-width: 380px) { h2.name { font-size: 3.5rem; } .middle-section { gap: 5px; } .event-box { padding: 0 8px; } }
+    </style>
+</head>
+<body>
+
+    <!-- -------------------------------------- -->
+    <!-- TELÓN Y SELLO                          -->
+    <!-- -------------------------------------- -->
+    <div id="seal-wrapper">
+        <div class="seal">
+            <span class="seal-letter">V</span>
+        </div>
+    </div>
+
+    <div id="curtain-container">
+        <div class="curtain curtain-left"></div>
+        <div class="curtain curtain-right"></div>
+    </div>
+
+    <!-- -------------------------------------- -->
+    <!-- CONTENIDO DE LA INVITACIÓN             -->
+    <!-- -------------------------------------- -->
+    <div class="card" id="main-card">
+        
+        <div class="photo-container">
+            <!-- REEMPLAZA EL ENLACE SRC POR LA FOTO REAL DE VALENTINA -->
+            <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=400&auto=format&fit=crop" alt="Foto Valentina">
+        </div>
+
+        <h1 class="title">MI BAUTIZO</h1>
+        <h2 class="name">Valentina</h2>
+
+        <p class="quote">
+            "En este día especial, la luz de Dios se encenderá en mi corazón para iluminar todo el camino de mi vida."
+        </p>
+
+        <div class="middle-section">
+            <div class="parents">
+                <span class="role-title">MIS PADRES</span>
+                Alejandra Mendieta<br>Chávez<br><br>
+                Valentin Díaz<br>Campos
+            </div>
+            
+            <div class="date-center">
+                <div class="date-number">14</div>
+                <div class="date-month">NOVIEMBRE</div>
+                <div class="date-year">2026</div>
+            </div>
+
+            <div class="godparents">
+                <span class="role-title">MI PADRINO</span>
+                Adrián Díaz<br>Campos
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="event-box">
+                <div class="event-icon">⛪</div>
+                <div class="event-title">CEREMONIA</div>
+                <div class="event-address">
+                    Iglesia de San Miguel Arcángel Mimiapan<br><br>
+                    Calle Veracruz 1, Barrio Centro<br>
+                    San Miguel Mimiapan, 52074<br>
+                    Xonacatlán, México
+                </div>
+                
+                <!-- REEMPLAZA EL # POR EL ENLACE DE MAPS DE LA IGLESIA -->
+                <a href="#" target="_blank" class="btn-map">📍 Ver Mapa</a>
+                
+                <div class="event-time">10:00 A.M.</div>
+            </div>
+
+            <div class="event-box">
+                <div class="event-icon">🎊</div>
+                <div class="event-title">RECEPCIÓN</div>
+                <div class="event-address">
+                    Salón Truchas El Sol<br><br>
+                    Gustavo Baz 701, Barrio San Pedro<br>
+                    San Miguel Mimiapan, 52074<br>
+                    Xonacatlán, México
+                </div>
+                
+                <!-- REEMPLAZA EL # POR EL ENLACE DE MAPS DEL SALÓN -->
+                <a href="#" target="_blank" class="btn-map">📍 Ver Mapa</a>
+                
+                <div class="event-time">03:00 P.M.</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>¡Te esperamos!</p>
+            <!-- REEMPLAZA EL NÚMERO DE TELÉFONO POR EL REAL -->
+            <a href="https://wa.me/525549566716?text=¡Hola!%20Confirmo%20mi%20asistencia%20al%20bautizo%20de%20Valentina." target="_blank" class="btn-rsvp">
+                Confirma tu asistencia<br>55 49 56 67 16
+            </a>
+        </div>
+
+    </div>
+
+    <!-- -------------------------------------- -->
+    <!-- SCRIPT DE ANIMACIÓN (TELÓN Y PÉTALOS)  -->
+    <!-- -------------------------------------- -->
+    <script>
+        function createPetalRain() {
+            const container = document.body;
+            const colors = ['#f2c4c1', '#fceceb', '#f7d2d0']; 
+
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const petal = document.createElement('div');
+                    petal.classList.add('petal');
+                    
+                    petal.style.left = Math.random() * 100 + 'vw';
+                    petal.style.animationDuration = (Math.random() * 3 + 4) + 's'; 
+                    petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const size = Math.random() * 8 + 12; 
+                    petal.style.width = size + 'px';
+                    petal.style.height = size + 'px';
+
+                    container.appendChild(petal);
+
+                    setTimeout(() => { petal.remove(); }, 8000);
+                }, i * 150); 
+            }
+        }
+
+        window.addEventListener('load', function() {
+            const sealWrapper = document.getElementById('seal-wrapper');
+            const curtainContainer = document.getElementById('curtain-container');
+            const card = document.getElementById('main-card');
+
+            setTimeout(function() {
+                
+                sealWrapper.style.opacity = '0';
+                sealWrapper.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                
+                setTimeout(function() {
+                    sealWrapper.style.display = 'none';
+
+                    curtainContainer.classList.add('curtain-container-open');
+                    
+                    card.classList.add('show');
+                    
+                    createPetalRain();
+
+                    setTimeout(() => {
+                        curtainContainer.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }, 1500);
+
+                }, 500); 
+
+            }, 1500); 
+        });
+    </script>
+</body>
+</html>
